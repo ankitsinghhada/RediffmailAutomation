@@ -1,0 +1,116 @@
+================================================================================
+                        MINI PROJECT DESCRIPTION
+================================================================================
+
+PROJECT NAME   : Rediffmail Signup Automation
+PROJECT TYPE   : Selenium WebDriver UI Test Automation (Java/Maven)
+FRAMEWORK      : Page Object Model (POM) with TestNG and Data-Driven Testing
+TARGET SITE    : https://mail.rediff.com/cgi-bin/login.cgi
+
+--------------------------------------------------------------------------------
+PROJECT OVERVIEW
+--------------------------------------------------------------------------------
+
+This project automates the user registration (signup) flow on the Rediffmail
+website using Selenium WebDriver. It follows the Page Object Model (POM) design
+pattern to keep test logic separate from page interaction logic.
+
+The test reads user data (name, email, password, date of birth, country) from an
+Excel file (data.xlsx) and uses that data to fill out the Rediffmail signup form
+automatically in a real Chrome browser window.
+
+Test Flow:
+  1. Open Chrome browser and navigate to Rediffmail login page
+  2. Click the "Get a new Rediffmail ID" link
+  3. Fill in Full Name
+  4. Enter desired email ID and click "Check availability"
+  5. Enter password and confirm password
+  6. Select date of birth (day, month, year)
+  7. Select country from dropdown
+  8. Validate the selected country
+
+--------------------------------------------------------------------------------
+IMPORTANT FILES AND THEIR ROLES
+--------------------------------------------------------------------------------
+
+1. pom.xml
+   Role    : Maven project configuration file (build & dependency management)
+   Details : Declares all project dependencies (Selenium, TestNG, Apache POI,
+             WebDriverManager) and build plugins (compiler, surefire). This is
+             the entry point for building and running the project with Maven.
+
+2. testng.xml
+   Role    : TestNG test suite configuration
+   Details : Defines which test classes to run and sets the thread count to 5
+             for parallel execution support. Maven Surefire plugin reads this
+             file to execute the test suite.
+
+3. tests/data.xlsx
+   Role    : Test data source (Excel spreadsheet)
+   Details : Contains the input data for the signup test — full name, email ID,
+             password, date of birth (day/month/year), and country. Read at
+             runtime by ExcelUtils.java using Apache POI.
+
+4. src/main/java/base/BaseTest.java
+   Role    : Base class for all tests (WebDriver setup and teardown)
+   Details : Initializes the Chrome browser using WebDriverManager before each
+             test method (@BeforeMethod) and quits the browser after each test
+             (@AfterMethod). All test classes extend this class to inherit the
+             driver instance.
+
+5. src/main/java/pages/loginpage.java
+   Role    : Page Object for the Rediffmail Login Page
+   Details : Contains methods to interact with the login page —
+             navigateToSite() opens the Rediffmail login URL, and
+             clickNewMailLink() clicks the "Get a new Rediffmail ID" link to
+             navigate to the registration page.
+
+6. src/main/java/pages/NewUser.java
+   Role    : Page Object for the Rediffmail Registration Page
+   Details : Contains methods for each field on the signup form —
+             fullName(), checkEmail(), CheckAvailability(), selectRadio(),
+             checkPassword(), checkRetypePass(), Sday(), nMonth(), nYear(),
+             and nCountry(). Each method interacts with one specific UI element.
+
+7. src/main/java/utils/ExcelUtils.java
+   Role    : Utility class for reading test data from Excel files
+   Details : Uses Apache POI library to open .xlsx files and read cell values
+             by row and column index. Handles all cell types (String, Numeric,
+             Boolean, Formula, Blank). Called by the test class to load input
+             data from data.xlsx.
+
+8. src/test/java/tests/redifTest.java
+   Role    : Main test class containing the signup test
+   Details : Extends BaseTest to use the Chrome driver. The testSignUp() method
+             reads all test data from Excel, creates instances of loginpage and
+             NewUser page objects, and calls their methods in sequence to
+             automate the full signup flow. Decorated with @Test (TestNG).
+
+--------------------------------------------------------------------------------
+TECHNOLOGIES USED
+--------------------------------------------------------------------------------
+
+  - Java                  : Programming language
+  - Maven                 : Build tool and dependency manager
+  - Selenium WebDriver    : Browser automation library (v4.19.1)
+  - TestNG                : Test framework for running and reporting tests
+  - Apache POI            : Library for reading Excel (.xlsx) test data
+  - WebDriverManager      : Auto-manages ChromeDriver download and setup
+  - Chrome Browser        : Browser used for test execution
+
+--------------------------------------------------------------------------------
+HOW TO RUN
+--------------------------------------------------------------------------------
+
+  Prerequisites:
+    - Java JDK installed
+    - Google Chrome browser installed
+    - Internet connection (for first-time dependency download)
+
+  Command (from project root directory):
+    C:\maven\apache-maven-3.9.6\bin\mvn test
+
+  Or add Maven to system PATH and run:
+    mvn test
+
+================================================================================
